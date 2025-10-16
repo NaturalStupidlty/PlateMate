@@ -17,11 +17,13 @@ HTTP requests: httpx
 
 Data validation: Pydantic
 
+
+
 ⚙️ Setup and launch
 Follow these steps to launch the project locally.
 
 1. Clone the repository
-git clone [https://github.com/MaxYarosh/pm.git](https://github.com/MaxYarosh/pm.git)
+git clone [https://github.com/NaturalStupidlty/PlateMate.git](https://github.com/NaturalStupidlty/PlateMate.git)
 cd pm
 
 2. Create and activate a virtual environment

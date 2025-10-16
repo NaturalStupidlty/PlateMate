@@ -7,7 +7,7 @@ httpx
 pyzbar
 opencv-python-headless
 python-magic
-Pillow # Для роботи з зображеннями
+Pillow 
 
-google-generativeai # Бібліотека для Gemini API
-python-telegram-bot # Бібліотека для Telegram Bot API
+google-generativeai 
+python-telegram-bot 
