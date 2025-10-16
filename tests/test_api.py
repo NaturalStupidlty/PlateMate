@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Цей файл буде містити логіку для надання персоналізованих рекомендацій.
-# Він може використовувати LLM для аналізу харчового щоденника користувача.
+# This file will contain the logic to provide personalized recommendations.
+# It can use LLM to analyze the user's food diary.
 
 async def generate_recommendations(user_id: int):
     """
     Generates dietary recommendations for the user.
     """
-    # TODO: Реалізувати логіку запиту до LLM з даними користувача.
+    # TODO: Implement the logic for querying LLM with user data.
     pass
 
 print("Personalized recommendation service logic.")

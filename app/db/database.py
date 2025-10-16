@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Цей файл буде містити налаштування підключення до ваших баз даних.
+# This file will contain the connection settings to your databases.
 
-# TODO: Налаштувати підключення до Qdrant для векторного пошуку.
-# TODO: Налаштувати підключення до реляційної бази даних (наприклад, PostgreSQL/SQLite) для збереження даних користувачів, якщо потрібно.
+# TODO: Configure the connection to Qdrant for vector search.
+# TODO: Configure the connection to a relational database (e.g. PostgreSQL/SQLite) to store user data, if needed.
 print("Database connection setup will be here.")

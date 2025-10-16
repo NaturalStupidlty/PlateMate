@@ -2,7 +2,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-# --- Схема для інформації про харчування ---
+# --- Nutrition information scheme ---
 class NutritionInfo(BaseModel):
     food_item: str
     calories: float
@@ -10,7 +10,7 @@ class NutritionInfo(BaseModel):
     fat: float
     carbohydrates: float
 
-# --- Схеми для користувача ---
+# --- User information scheme ---
 class UserBase(BaseModel):
     telegram_id: int
     weight: Optional[float] = None
@@ -25,4 +25,4 @@ class User(UserBase):
     id: int
 
     class Config:
-        from_attributes = True # orm_mode = True for pydantic v1
+        from_attributes = True 

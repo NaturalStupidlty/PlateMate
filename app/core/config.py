@@ -6,7 +6,6 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "PlateMate"
     API_V1_STR: str = "/api/v1"
 
-    # Секретні ключі
     TELEGRAM_BOT_TOKEN: str
     GOOGLE_API_KEY: str  
 
@@ -16,6 +15,6 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# harcoding
+# hardcode
 settings.GOOGLE_API_KEY = "AIzaSyAx_ZbysMYSshwhd6qIlWNBP0f2zvbHbC8"
 

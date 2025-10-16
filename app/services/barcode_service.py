@@ -5,9 +5,9 @@ from PIL import Image
 import io
 from typing import Optional
 from app.db.schemas import NutritionInfo
-import re # Додаємо модуль для роботи з регулярними виразами
+import re 
 
-# API ендпоїнт для Open Food Facts
+# API for Open Food Facts
 OPENFOODFACTS_API_URL = "https://world.openfoodfacts.org/api/v2/product/{barcode}.json"
 
 def _parse_quantity(quantity_str: str) -> Optional[float]:
@@ -18,17 +18,15 @@ def _parse_quantity(quantity_str: str) -> Optional[float]:
     if not isinstance(quantity_str, str):
         return None
     
-    # Уніфікуємо рядок для обробки
+    
     quantity_str = quantity_str.lower().replace(',', '.')
     
-    # Знаходимо числове значення
     numeric_match = re.search(r'(\d+\.?\d*)', quantity_str)
     if not numeric_match:
         return None
         
     value = float(numeric_match.group(1))
     
-    # Конвертуємо кілограми та літри в грами та мілілітри
     if 'kg' in quantity_str or 'l' in quantity_str:
         value *= 1000
         
@@ -65,7 +63,7 @@ async def get_product_info_by_barcode(barcode: str) -> Optional[NutritionInfo]:
                     
                     if "energy-kcal_100g" in nutriments and "proteins_100g" in nutriments:
                         
-                        # --- НОВА ЛОГІКА: Перерахунок на вагу упаковки ---
+                       
                         multiplier = 1.0
                         quantity_str = product.get('quantity')
                         
@@ -74,7 +72,7 @@ async def get_product_info_by_barcode(barcode: str) -> Optional[NutritionInfo]:
                             if package_size and package_size > 0:
                                 multiplier = package_size / 100.0
                         
-                        # Отримуємо базові значення на 100г, обробляючи можливі пусті рядки
+                        # Get base values ​​per 100g, handling possible empty strings
                         calories_100g = float(nutriments.get("energy-kcal_100g") or 0)
                         protein_100g = float(nutriments.get("proteins_100g") or 0)
                         fat_100g = float(nutriments.get("fat_100g") or 0)

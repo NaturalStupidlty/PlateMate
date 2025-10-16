@@ -9,10 +9,10 @@ async def create_user(user: schemas.UserCreate):
     """
     Create new user profile
     """
-    # TODO: Логіка збереження користувача в базу даних
-    # Повертаємо дані, імітуючи створення в БД
+    # TODO: Logic for saving the user to the database
+    # Return the data, simulating creation in the database
     return schemas.User(
-        id=1,  # Імітація ID з бази даних
+        id=1,  # Imitation of ID from database
         telegram_id=user.telegram_id,
         weight=user.weight,
         height=user.height,

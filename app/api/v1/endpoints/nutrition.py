@@ -38,7 +38,7 @@ async def analyze_food_by_barcode(image: UploadFile = File(...)):
     if not barcode:
         raise HTTPException(status_code=404, detail="Barcode not found on the image.")
         
-    # Крок 2: Отримуємо інформацію про продукт за штрихкодом
+    
     product_info = await barcode_service.get_product_info_by_barcode(barcode)
     
     if not product_info:

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Тут будуть модульні тести для бізнес-логіки в сервісах.
+# Here will be unit tests for business logic in services.
 
 def test_some_service_logic():
-    # TODO: Написати тести для сервісів.
+    # TODO: Write tests for services.
     assert True
 
 print("Service layer tests will be here.")
