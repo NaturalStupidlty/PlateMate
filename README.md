@@ -18,27 +18,6 @@ HTTP requests: httpx
 Data validation: Pydantic
 
 
-Structure:
-/
-├── app/
-│   ├── api/v1/
-│   │   ├── endpoints/
-│   │   │   ├── nutrition.py    # API endpoints for nutrition analysis.
-│   │   │   └── users.py        # API endpoints for user profiles (placeholder).
-│   │   └── router.py         # Main router for API v1.
-│   ├── core/
-│   │   └── config.py         # Handles environment variables and settings.
-│   ├── db/
-│   │   └── schemas.py        # Pydantic models for data validation.
-│   ├── services/
-│   │   ├── barcode_service.py# Logic for barcode scanning via Open Food Facts.
-│   │   └── vision_service.py # Logic for image analysis via Gemini API.
-│   └── main.py               # Main FastAPI application entry point.
-├── .env                      # Stores secret API keys (ignored by Git).
-├── .gitignore                # Specifies files for Git to ignore.
-├── requirements.txt          # Lists all Python project dependencies.
-└── README.md                 # This documentation file.
-
 
 ⚙️ Setup and launch
 Follow these steps to launch the project locally.
