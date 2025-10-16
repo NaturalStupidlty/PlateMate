@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-multipart
+httpx
+pyzbar
+opencv-python-headless
+python-magic
+Pillow # Для роботи з зображеннями
+
+google-generativeai # Бібліотека для Gemini API
+python-telegram-bot # Бібліотека для Telegram Bot API
