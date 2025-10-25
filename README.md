@@ -9,7 +9,6 @@ Technology stack
 Backend: FastAPI, Uvicorn
 
 AI/ML: Google Gemini API (gemini-2.5-flash)
-!!! APIKEY in core.config !!!
 
 Barcode recognition: pyzbar, OpenCV
 
@@ -38,17 +37,51 @@ source venv/bin/activate
 3. Install dependencies
 pip install -r requirements.txt
 
-4. Make .env:
-GOOGLE_API_KEY, TELEGRAM_BOT_TOKEN
+44. Configure environment variables
 
-5. Start the server
+Create a .env file in the project's root folder.
+
+.env
+
+# Required for accessing the AI image analysis model
+GOOGLE_API_KEY="YOUR_GEMINI_API_KEY"
+
+# Required for the Telegram bot to operate
+TELEGRAM_BOT_TOKEN="YOUR_TELEGRAM_BOT_TOKEN"
+
+
+5. Run the server
+
+Important: Run the server and the bot in two separate terminals.
+
+Open the first terminal.
+
+Ensure you are in the project folder (PlateMate).
+
+Execute the command:
+
 uvicorn app.main:app --reload --port 8001
 
-The server will be available at http://127.0.0.1:8001.
 
-API documentation
-Interactive documentation (Swagger UI) is automatically generated and available at:
-http://127.0.0.1:8001/docs
+The server will be available at http://127.0.0.1:8001. Do not close this terminal.
+
+6. Run the Telegram bot
+
+Open the second terminal.
+
+Ensure you are in the project folder (PlateMate).
+
+Execute the command:
+
+python app/bot/main.py
+
+
+The bot will start running. Do not close this terminal.
+
+📚 API Documentation
+
+Interactive documentation (Swagger UI) is automatically generated and available at (when the server is running):
+http://127.0.0.1:8001/docs.
 
 Endpoint examples
 Food analysis by photo

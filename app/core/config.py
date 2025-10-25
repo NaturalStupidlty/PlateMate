@@ -16,5 +16,5 @@ class Settings(BaseSettings):
 settings = Settings()
 
 # hardcode
-settings.GOOGLE_API_KEY = "AIzaSyAx_ZbysMYSshwhd6qIlWNBP0f2zvbHbC8"
+settings.GOOGLE_API_KEY = "YOUR TOKEN"
 
