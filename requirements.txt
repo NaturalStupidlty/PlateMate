@@ -4,10 +4,13 @@ pydantic
 pydantic-settings
 python-multipart
 httpx
+io
 pyzbar
 opencv-python-headless
 python-magic
-Pillow 
+PIL
+Pillow
+torch
 
 google-generativeai 
 python-telegram-bot 
