@@ -16,5 +16,5 @@ class Settings(BaseSettings):
 settings = Settings()
 
 # hardcode
-settings.GOOGLE_API_KEY = "YOUR TOKEN"
+settings.GOOGLE_API_KEY = "YOUR_GEMINI_API_KEY"
 

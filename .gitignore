@@ -51,6 +51,8 @@ coverage.xml
 
 
 .env
+ml_stuff/dish_images.pkl
+.vs
 .venv
 env/
 venv/

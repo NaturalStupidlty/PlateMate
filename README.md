@@ -37,7 +37,7 @@ source venv/bin/activate
 3. Install dependencies
 pip install -r requirements.txt
 
-44. Configure environment variables
+4. Configure environment variables
 
 Create a .env file in the project's root folder.
 
@@ -61,7 +61,8 @@ Ensure you are in the project folder (PlateMate).
 Execute the command:
 
 uvicorn app.main:app --reload --port 8001
-
+or
+uvicorn app.main:app --port 8001
 
 The server will be available at http://127.0.0.1:8001. Do not close this terminal.
 
