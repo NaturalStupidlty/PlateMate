@@ -4,13 +4,17 @@ pydantic
 pydantic-settings
 python-multipart
 httpx
-io
 pyzbar
 opencv-python-headless
 python-magic
-PIL
 Pillow
-torch
 
 google-generativeai 
 python-telegram-bot 
+
+
+scikit-learn 
+pandas
+numpy==1.26.1
+torch==2.1.0
+torchvision==0.16.0
