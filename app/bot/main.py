@@ -1,10 +1,25 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import sys
 import os
 import httpx
 import io
 import asyncio
 import collections
+from app.bot.scrape_calories import (
+    find_best_match,
+    get_product_nutrition,
+)
+import json
+
+def load_local_product_catalog(path="app/bot/cache/products.json"):
+    global PRODUCT_CATALOG
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            PRODUCT_CATALOG = json.load(f)
+        print(f"Loaded {len(PRODUCT_CATALOG)} products from local cache.")
+    except Exception as e:
+        print(f"FAILED to load local product list: {e}")
+        PRODUCT_CATALOG = []
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -29,6 +44,47 @@ CLIENT_TIMEOUT = 60.0
 PHOTO, CHOOSING = range(2)
 BARCODE, AI_ANALYSIS = "barcode", "ai_analysis"
 
+async def nutrition_command(update: Update, context: CallbackContext):
+    await update.message.reply_text(
+        "Enter product name",
+        parse_mode="Markdown"
+    )
+
+async def nutrition_query_handler(update: Update, context: CallbackContext):
+    global PRODUCT_CATALOG
+    text = update.message.text.replace("/nutrition", "").strip()
+
+    if not text:
+        await update.message.reply_text("Enter product name.", parse_mode="Markdown")
+        return
+
+    if not PRODUCT_CATALOG:
+        await update.message.reply_text(
+            "Failed load catalogue. "
+        )
+        return
+
+    matches = find_best_match(text, PRODUCT_CATALOG, limit=5)
+    if not matches:
+        await update.message.reply_text("Product not found. Try another product name.")
+        return
+
+    name, url, score = matches[0]
+    await update.message.reply_text(f"🔎 Found best match: *{name}*", parse_mode="Markdown")
+
+    try:
+        info = get_product_nutrition(url)
+    except Exception as e:
+        await update.message.reply_text(f"Error: {e}")
+        return
+
+    reply = f"**{info.get('title', name)}**\n\n"
+    reply += f"Calories: {info.get('energy_kcal', '?')}\n"
+    reply += f"Proteins: {info.get('protein_g', '?')}\n"
+    reply += f"Fats: {info.get('fat_g', '?')}\n"
+    reply += f"Carbohydrates: {info.get('carbs_g', '?')}\n"
+
+    await update.message.reply_text(reply, parse_mode="Markdown")
 
 def update_user_history(context: CallbackContext, hot_vector: list):
     if not hot_vector or len(hot_vector) != 12:
@@ -206,6 +262,10 @@ def run_bot():
     application.add_handler(CommandHandler("menu", menu))
     application.add_handler(CommandHandler("recommend", recommend_command))
     application.add_handler(CommandHandler("clear_history", clear_history))
+    application.add_handler(CommandHandler("nutrition", nutrition_command))
+    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r"^/nutrition "), nutrition_query_handler))
+
+    load_local_product_catalog()
 
     print("Bot started...")
     application.run_polling()
