@@ -12,6 +12,9 @@ Pillow
 google-generativeai 
 python-telegram-bot 
 
+requests
+beautifulsoup4
+rapidfuzz
 
 scikit-learn 
 pandas
