@@ -237,7 +237,8 @@ async def set_commands(app):
         BotCommand("start", "Restart"),
         BotCommand("menu", "Show menu"),
         BotCommand("recommend", "Get recommendations based on history"),
-        BotCommand("clear_history", "Clear your food history")
+        BotCommand("clear_history", "Clear your food history"),
+        BotCommand("nutrition", "Type food name")
     ])
 
 def run_bot():
