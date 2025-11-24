@@ -5,7 +5,7 @@ import httpx
 import io
 import asyncio
 import collections
-from app.bot.scrape_calories import (
+from scraper import (
     find_best_match,
     get_product_nutrition,
 )
@@ -39,7 +39,7 @@ from app.core.config import settings
 
 API_BASE_URL = "http://127.0.0.1:8001/api/v1"
 CLIENT_TIMEOUT = 60.0
-
+WAIT_PRODUCT_NAME = 1001
 
 PHOTO, CHOOSING = range(2)
 BARCODE, AI_ANALYSIS = "barcode", "ai_analysis"
@@ -49,10 +49,11 @@ async def nutrition_command(update: Update, context: CallbackContext):
         "Enter product name",
         parse_mode="Markdown"
     )
+    return WAIT_PRODUCT_NAME
 
 async def nutrition_query_handler(update: Update, context: CallbackContext):
     global PRODUCT_CATALOG
-    text = update.message.text.replace("/nutrition", "").strip()
+    text = update.message.text.strip()
 
     if not text:
         await update.message.reply_text("Enter product name.", parse_mode="Markdown")
@@ -62,12 +63,12 @@ async def nutrition_query_handler(update: Update, context: CallbackContext):
         await update.message.reply_text(
             "Failed load catalogue. "
         )
-        return
+        return WAIT_PRODUCT_NAME
 
     matches = find_best_match(text, PRODUCT_CATALOG, limit=5)
     if not matches:
         await update.message.reply_text("Product not found. Try another product name.")
-        return
+        return WAIT_PRODUCT_NAME
 
     name, url, score = matches[0]
     await update.message.reply_text(f"🔎 Found best match: *{name}*", parse_mode="Markdown")
@@ -76,7 +77,7 @@ async def nutrition_query_handler(update: Update, context: CallbackContext):
         info = get_product_nutrition(url)
     except Exception as e:
         await update.message.reply_text(f"Error: {e}")
-        return
+        return WAIT_PRODUCT_NAME
 
     reply = f"**{info.get('title', name)}**\n\n"
     reply += f"Calories: {info.get('energy_kcal', '?')}\n"
@@ -85,6 +86,7 @@ async def nutrition_query_handler(update: Update, context: CallbackContext):
     reply += f"Carbohydrates: {info.get('carbs_g', '?')}\n"
 
     await update.message.reply_text(reply, parse_mode="Markdown")
+    return ConversationHandler.END
 
 def update_user_history(context: CallbackContext, hot_vector: list):
     if not hot_vector or len(hot_vector) != 12:
@@ -258,13 +260,18 @@ def run_bot():
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
+    nutrition_conv = ConversationHandler(
+        entry_points=[CommandHandler("nutrition", nutrition_command)],
+        states={WAIT_PRODUCT_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, nutrition_query_handler)]},
+        fallbacks=[CommandHandler("cancel", cancel)],
+    )
+
     application.add_handler(conv_handler)
+    application.add_handler(nutrition_conv)
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("menu", menu))
     application.add_handler(CommandHandler("recommend", recommend_command))
     application.add_handler(CommandHandler("clear_history", clear_history))
-    application.add_handler(CommandHandler("nutrition", nutrition_command))
-    application.add_handler(MessageHandler(filters.TEXT & filters.Regex(r"^/nutrition "), nutrition_query_handler))
 
     load_local_product_catalog()
 
