@@ -72,38 +72,55 @@ RE_FAT = re.compile(r'Жири[:\s]*([0-9]+(?:[.,][0-9]+)?)\s*г', flags=re.I)
 RE_FIBER = re.compile(r'(?:Волокна|Клітковина|Волокна)[:\s]*([0-9]+(?:[.,][0-9]+)?)\s*г', flags=re.I)
 RE_SUGAR = re.compile(r'Цукор[:\s]*([0-9]+(?:[.,][0-9]+)?)\s*г', flags=re.I)
 
-def parse_product_page(html: str) -> Dict[str, Any]:
-    text = BeautifulSoup(html, "html.parser").get_text(separator="\n")
-    def find_first(pattern):
-        m = pattern.search(text)
-        if not m:
-            return None
-        val = m.group(1).replace(",", ".")
-        try:
-            return float(val)
-        except:
-            return None
+def parse_product_page(html: str):
+    soup = BeautifulSoup(html, "html.parser")
+    text = soup.get_text(separator="\n")
+    lines = [x.strip() for x in text.split("\n") if x.strip()]
 
-    energy = find_first(RE_ENERGY)
-    protein = find_first(RE_PROTEIN)
-    carbs = find_first(RE_CARBS)
-    fat = find_first(RE_FAT)
-    fiber = find_first(RE_FIBER)
-    sugar = find_first(RE_SUGAR)
-
-    if energy is None:
-        m = re.search(r'Енергія.*?([0-9]+(?:[.,][0-9]+)?)\s*(?:ккал|kcal)', text, flags=re.I|re.S)
-        if m:
-            energy = float(m.group(1).replace(",", "."))
-
-    return {
-        "energy_kcal": energy,
-        "protein_g": protein,
-        "carbs_g": carbs,
-        "fat_g": fat,
-        "fiber_g": fiber,
-        "sugar_g": sugar
+    # итоговые значения
+    nutrients = {
+        "energy_kcal": None,
+        "protein_g": None,
+        "carbs_g": None,
+        "sugar_g": None,
+        "fat_g": None,
+        "fiber_g": None,
     }
+
+    # что ищем
+    markers = {
+        "ккал": "energy_kcal",
+        "Білки": "protein_g",
+        "Вуглеводи": "carbs_g",
+        "Цукор": "sugar_g",
+        "Жири": "fat_g",
+        "Волокна": "fiber_g",
+    }
+
+    # Проходим строки и ищем показатели
+    for i, line in enumerate(lines):
+
+        # 1) калории — "94 ккал" в одной строке
+        if "ккал" in line:
+            m = re.search(r"([0-9]+(?:[.,][0-9]+)?)\s*ккал", line)
+            if m:
+                nutrients["energy_kcal"] = float(m.group(1).replace(",", "."))
+                continue
+
+        # 2) остальные параметры — название на своей строке
+        if line in markers:
+            key = markers[line]
+
+            # значение — в следующих строках
+            for j in range(i + 1, i + 5):
+                if j >= len(lines):
+                    break
+                m = re.search(r"([0-9]+(?:[.,][0-9]+)?)", lines[j])
+                if m:
+                    nutrients[key] = float(m.group(1).replace(",", "."))
+                    break
+
+    return nutrients
 
 # --- product list builder ---
 def build_product_list(max_pages=50, sleep=0.5, force_refresh=False):
